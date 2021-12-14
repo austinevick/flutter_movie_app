@@ -16,7 +16,7 @@ class MovieCarouselWidget extends StatelessWidget {
       children: [
         CarouselSlider.builder(
           options: CarouselOptions(
-              height: 250, viewportFraction: 0.5, enlargeCenterPage: true),
+              viewportFraction: 0.4, height: 300, enlargeCenterPage: true),
           itemCount: movies!.length,
           itemBuilder: (context, index, realIndex) {
             final movie = movies![index];

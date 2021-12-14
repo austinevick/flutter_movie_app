@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
+import 'package:flutter_riverpod_movie_app/screens/widgets/movie_list_view.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final _nowPlayingMovieFutureProvider = FutureProvider((ref) async {
@@ -21,28 +22,7 @@ class NowPlayingMovieTab extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     final movie = watch.watch(_nowPlayingMovieFutureProvider);
     return movie.when(
-        data: (movies) => SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: movies.length,
-                itemBuilder: (context, i) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl:
-                          '${ApiConstants.BASE_IMAGE_URL}${movies[i].posterPath}',
-                      placeholder: (context, url) => const Center(
-                          child: SpinKitDoubleBounce(
-                        color: Colors.grey,
-                      )),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+        data: (movies) => SizedBox(height: 230, child: MovieListView(movies)),
         error: (error, stackTrace) => Text(error.toString()),
         loading: () => const Center(
                 child: SpinKitDoubleBounce(

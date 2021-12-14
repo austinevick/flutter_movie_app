@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
-import 'package:flutter_riverpod_movie_app/screens/home_screen.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_tab/popular_movie_tab.dart';
 
 import 'coming_soon.dart';
@@ -26,25 +23,38 @@ class _MovieTabsState extends State<MovieTabs> {
       final movies = watch.watch(movieProvider).movies;
       return Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(
-              tabs.length,
-              (i) => AnimatedContainer(
-                duration: const Duration(seconds: 1),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            color: currentIndex == i
-                                ? Colors.red
-                                : Colors.transparent))),
-                child: MaterialButton(
-                  onPressed: () => setState(() => currentIndex = i),
-                  child: Text(tabs[i]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                tabs.length,
+                (i) => GestureDetector(
+                  onTap: () => setState(() => currentIndex = i),
+                  child: AnimatedContainer(
+                    alignment: Alignment.center,
+                    height: 40,
+                    width: 120,
+                    duration: const Duration(milliseconds: 800),
+                    decoration: BoxDecoration(
+                      color:
+                          currentIndex == i ? Colors.red : Colors.transparent,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      tabs[i],
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: currentIndex == i ? Colors.white : Colors.grey,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
+          const SizedBox(height: 18),
           buildMovieTabs(movies)
         ],
       );
@@ -63,29 +73,3 @@ class _MovieTabsState extends State<MovieTabs> {
     return movies;
   }
 }
-
-
-/*
- SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.movies!.length,
-              itemBuilder: (context, i) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl:
-                        '${ApiConstants.BASE_IMAGE_URL}${widget.movies![i].posterPath}',
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-              ),
-            ),
-          )
-
-
-*/
