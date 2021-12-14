@@ -18,10 +18,7 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         title: 'Movie App',
-        theme: ThemeData(
-          //  primaryColor: AppColor.vulcan,
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData.dark(),
         home: const HomeScreen(),
       ),
     );

@@ -11,14 +11,14 @@ final movieProvider = ChangeNotifierProvider<MovieProvider>((ref) {
 });
 
 class MovieProvider extends ChangeNotifier {
-  List<MovieEntity> movies = [];
+  List<MovieEntity> trendingMovies = [];
   final int defaultIndex = 0;
   MovieRepository trending = MovieRepository();
 
   Future<List<MovieEntity>> getTrendingMovies() async {
     Future<List<MovieEntity>> movies = trending.getTrending();
     return movies.then((movies) {
-      this.movies = movies;
+      trendingMovies = movies;
       notifyListeners();
       return movies;
     });

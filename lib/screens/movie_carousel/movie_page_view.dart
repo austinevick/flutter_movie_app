@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 
 import 'animated_movie_card.dart';
@@ -33,9 +34,10 @@ class _MoviePageViewState extends State<MoviePageView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
-      height: MediaQuery.of(context).size.height / 3,
+      margin: const EdgeInsets.symmetric(),
+      height: MediaQuery.of(context).size.height / 2,
       child: PageView.builder(
+        controller: controller,
         onPageChanged: (index) {},
         pageSnapping: true,
         itemCount: widget.movies!.length,

@@ -8,7 +8,7 @@ class MovieAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       IconButton(onPressed: () {}, icon: SvgPicture.asset('assets/menu.svg')),
       IconButton(onPressed: () {}, icon: const Logo()),
       IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
