@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_carousel/movie_carousel_widget.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'movie_tab/movie_tabs.dart';
 
 final movieFutureProvider = FutureProvider((ref) async {
   final movieRef = ref.read(movieProvider);
@@ -16,49 +19,28 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(title: const Text('Movies'), actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+          ]),
           body: watch.watch(movieFutureProvider).when(
-              data: (movies) {
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    FractionallySizedBox(
-                      alignment: Alignment.topCenter,
-                      heightFactor: 0.6,
-                      child: MovieCarouselWidget(
+                error: (error, stackTrace) => Text(error.toString()),
+                loading: () => const Center(
+                    child: SpinKitDoubleBounce(
+                  color: Colors.grey,
+                )),
+                data: (movies) {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      MovieCarouselWidget(
                         movies: movies,
-                        defaultIndex: watch.read(movieProvider).defaultIndex,
                       ),
-                    ),
-                    const FractionallySizedBox(
-                      alignment: Alignment.bottomCenter,
-                      heightFactor: 0.4,
-                      child: Placeholder(),
-                    )
-                  ],
-                );
-              },
-              error: (error, stackTrace) => Text(error.toString()),
-              loading: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ))),
+                      const SizedBox(height: 16),
+                      const MovieTabs()
+                    ],
+                  );
+                },
+              )),
     );
   }
 }
-
-/*
-Stack(
-                        fit: StackFit.expand,
-                        children: const [
-                          FractionallySizedBox(
-                            alignment: Alignment.topCenter,
-                            heightFactor: 0.6,
-                            child: MovieCarouselWidget(),
-                          ),
-                          FractionallySizedBox(
-                            alignment: Alignment.bottomCenter,
-                            heightFactor: 0.4,
-                            child: Placeholder(),
-                          )
-                        ],
-                      );
-*/
