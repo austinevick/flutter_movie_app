@@ -16,7 +16,7 @@ class MovieTabs extends StatefulWidget {
 
 class _MovieTabsState extends State<MovieTabs> {
   int currentIndex = 0;
-  final tabs = ['Popular', 'Now', 'Soon'];
+  final tabs = ['Popular', 'Now playing', 'Coming soon'];
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
@@ -34,17 +34,19 @@ class _MovieTabsState extends State<MovieTabs> {
                   child: AnimatedContainer(
                     alignment: Alignment.center,
                     height: 40,
-                    width: 120,
+                    width: 100,
                     duration: const Duration(milliseconds: 800),
                     decoration: BoxDecoration(
-                      color:
-                          currentIndex == i ? Colors.red : Colors.transparent,
-                      borderRadius: BorderRadius.circular(100),
+                      border: Border(
+                          bottom: BorderSide(
+                        width: 2,
+                        color:
+                            currentIndex == i ? Colors.red : Colors.transparent,
+                      )),
                     ),
                     child: Text(
                       tabs[i],
                       style: TextStyle(
-                        fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: currentIndex == i ? Colors.white : Colors.grey,
                       ),

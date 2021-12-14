@@ -46,4 +46,22 @@ class MovieProvider extends ChangeNotifier {
       return movies;
     });
   }
+
+  Future<List<MovieEntity>> getTopRatedMovies() async {
+    Future<List<MovieEntity>> movies = repository.getTopRated();
+    return movies.then((movies) {
+      movies = movies;
+      notifyListeners();
+      return movies;
+    });
+  }
+
+  Future<List<MovieEntity>> getMovieDetail({required int id}) async {
+    Future<List<MovieEntity>> movies = repository.getDetail(id: id);
+    return movies.then((movies) {
+      movies = movies;
+      notifyListeners();
+      return movies;
+    });
+  }
 }
