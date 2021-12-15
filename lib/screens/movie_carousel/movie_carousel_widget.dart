@@ -24,7 +24,7 @@ class MovieCarouselWidget extends StatelessWidget {
             return GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => MovieDetailPage(
-                        id: movie.id,
+                        id: movie.id!,
                       ))),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),

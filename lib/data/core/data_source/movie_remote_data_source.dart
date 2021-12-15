@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
 
@@ -9,7 +10,7 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getComingSoon();
   Future<List<MovieModel>> getPlayingNow();
   Future<List<MovieModel>> getTopRated();
-  Future<List<MovieModel>> getDetails({required int id});
+  Future<MovieDetailModel> getDetails({required int id});
 }
 
 class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
@@ -57,10 +58,10 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getDetails({required int id}) async {
+  Future<MovieDetailModel> getDetails({required int id}) async {
     final response = await _client.get('movie/$id');
-    final movies = MoviesResultModel.fromJson(response).movies;
+    final movies = MovieDetailModel.fromJson(response);
     print(movies);
-    return movies!;
+    return movies;
   }
 }

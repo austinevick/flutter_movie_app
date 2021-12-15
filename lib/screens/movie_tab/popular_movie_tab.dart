@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/widgets/movie_list_view.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final _popularMovieFutureProvider = FutureProvider((ref) async {
   final movieRef = ref.read(movieProvider);
@@ -19,11 +20,11 @@ class PopularMovieTab extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     final movie = watch.watch(_popularMovieFutureProvider);
     return movie.when(
-      data: (movies) => SizedBox(height: 230, child: MovieListView(movies)),
-      error: (error, stackTrace) => Text(error.toString()),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+        data: (movies) => SizedBox(height: 230, child: MovieListView(movies)),
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () => const Center(
+                child: SpinKitDoubleBounce(
+              color: Colors.grey,
+            )));
   }
 }
