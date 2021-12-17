@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_movie_app/data/core/api_client.dart';
+import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_remote_data_source.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/domain/repositories/movie_repository.dart';
 import 'package:flutter_riverpod_movie_app/screens/home_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
+
+import 'data/core/api_constant.dart';
 
 void main() {
   runApp(const MyApp());

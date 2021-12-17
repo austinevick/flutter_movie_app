@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
-import 'package:flutter_riverpod_movie_app/domain/entities/movie_detail_entity.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/domain/repositories/movie_repository.dart';
 
-final movieProvider = ChangeNotifierProvider<MovieProvider>((ref) {
-  return MovieProvider();
+final movieProvider = ChangeNotifierProvider<MovieNotifierProvider>((ref) {
+  return MovieNotifierProvider();
 });
 
-class MovieProvider extends ChangeNotifier {
+class MovieNotifierProvider extends ChangeNotifier {
   MovieRepository repository = MovieRepository();
   List<MovieEntity> movies = [];
-  MovieDetailEntity movieDetailEntity = const MovieDetailEntity();
 
   Future<List<MovieEntity>> getTrendingMovies() async {
     Future<List<MovieEntity>> movies = repository.getTrending();
@@ -59,12 +57,7 @@ class MovieProvider extends ChangeNotifier {
     });
   }
 
-  Future<MovieDetailEntity> getMovieDetail({required int id}) async {
-    Future<MovieDetailEntity> movies = repository.getDetail(id: id);
-    return movies.then((movies) {
-      movieDetailEntity = movies;
-      notifyListeners();
-      return movies;
-    });
+  Future<List<CastCrewModel>> getMovieCastCrew(int id) async {
+    return await repository.getCastCrew(id);
   }
 }

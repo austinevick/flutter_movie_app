@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod_movie_app/domain/entities/movie_detail_entity.dart';
-
-class MovieDetailModel extends MovieDetailEntity {
+class MovieDetailModel {
   final List<Genres> genres;
   final String homepage;
   final int id;
@@ -26,32 +24,7 @@ class MovieDetailModel extends MovieDetailEntity {
     required this.voteAverage,
     required this.voteCount,
     required this.backdropPath,
-  }) : super(
-            id: id,
-            overview: overview,
-            popularity: popularity,
-            posterPath: posterPath,
-            voteCount: voteCount,
-            title: title,
-            voteAverage: voteAverage,
-            backdropPath: backdropPath);
-
-  Map<String, dynamic> toMap() {
-    return {
-      'genres': genres.map((x) => x.toMap()).toList(),
-      'homepage': homepage,
-      'id': id,
-      'originalTitle': originalTitle,
-      'overview': overview,
-      'popularity': popularity,
-      'posterPath': posterPath,
-      'title': title,
-      'video': video,
-      'voteAverage': voteAverage,
-      'voteCount': voteCount,
-      'backdropPath': backdropPath,
-    };
-  }
+  });
 
   factory MovieDetailModel.fromJson(Map<String, dynamic> map) {
     return MovieDetailModel(

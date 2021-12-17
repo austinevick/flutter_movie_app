@@ -20,7 +20,7 @@ class MovieListView extends StatelessWidget {
       itemBuilder: (context, i) => GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => MovieDetailPage(
-                  id: movies![i].id!,
+                  movie: movies![i],
                 ))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
