@@ -2,6 +2,7 @@ import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
 
 import '../api_client.dart';
 
@@ -11,8 +12,9 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getComingSoon();
   Future<List<MovieModel>> getPlayingNow();
   Future<List<MovieModel>> getTopRated();
-  Future<MovieDetailModel> getDetails({required int id});
+  Future<MovieDetailModel> getDetails(int id);
   Future<List<CastCrewModel>> getCastCrew(int id);
+  Future<List<RecommendationModel>> getRecommendation(int id);
 }
 
 class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
@@ -60,7 +62,7 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
   }
 
   @override
-  Future<MovieDetailModel> getDetails({required int id}) async {
+  Future<MovieDetailModel> getDetails(int id) async {
     final response = await _client.get('movie/$id');
     final movies = MovieDetailModel.fromJson(response);
     print(movies);
@@ -74,5 +76,13 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
     List<dynamic> casts = response['cast'];
     casts.forEach((json) => cast.add(CastCrewModel.fromJson(json)));
     return cast;
+  }
+
+  @override
+  Future<List<RecommendationModel>> getRecommendation(int id) async {
+    final response = await _client.get('movie/$id/recommendations');
+    final movies = RecommendationResult.fromJson(response).results;
+    print(movies);
+    return movies!;
   }
 }

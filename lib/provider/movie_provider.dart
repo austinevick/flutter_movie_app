@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/domain/repositories/movie_repository.dart';
 
@@ -57,7 +59,15 @@ class MovieNotifierProvider extends ChangeNotifier {
     });
   }
 
+  Future<MovieDetailModel> getMovieDetails(int id) async {
+    return await repository.getDetail(id);
+  }
+
   Future<List<CastCrewModel>> getMovieCastCrew(int id) async {
     return await repository.getCastCrew(id);
+  }
+
+  Future<List<RecommendationModel>> getMovieRecommendation(int id) async {
+    return await repository.getMovieRecommendation(id);
   }
 }

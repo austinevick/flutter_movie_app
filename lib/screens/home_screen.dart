@@ -36,30 +36,34 @@ class HomeScreen extends ConsumerWidget {
                   color: Colors.grey,
                 )),
                 data: (movies) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Trending',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          MovieCarouselWidget(
-                            movies: movies,
-                          ),
-                          const SizedBox(height: 16),
-                          const MovieTabs(),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Top Rated',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(height: 12),
-                          const TopRatedMovieCard()
-                        ],
+                  return RefreshIndicator(
+                    onRefresh: () =>
+                        watch.read(movieProvider).getTrendingMovies(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Trending',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            MovieCarouselWidget(
+                              movies: movies,
+                            ),
+                            const SizedBox(height: 16),
+                            const MovieTabs(),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Top Rated',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(height: 12),
+                            const TopRatedMovieCard()
+                          ],
+                        ),
                       ),
                     ),
                   );

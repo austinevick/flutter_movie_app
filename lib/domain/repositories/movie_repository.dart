@@ -4,6 +4,7 @@ import 'package:flutter_riverpod_movie_app/data/core/api_client.dart';
 import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_remote_data_source.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:http/http.dart';
 
@@ -54,7 +55,7 @@ class MovieRepository {
 
   Future<MovieDetailModel> getDetail(int id) async {
     try {
-      return await remoteDataSource.getDetails(id: id);
+      return await remoteDataSource.getDetails(id);
     } on SocketException catch (e) {
       throw Exception(e.message);
     }
@@ -63,6 +64,14 @@ class MovieRepository {
   Future<List<CastCrewModel>> getCastCrew(int id) async {
     try {
       return await remoteDataSource.getCastCrew(id);
+    } on SocketException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Future<List<RecommendationModel>> getMovieRecommendation(int id) async {
+    try {
+      return await remoteDataSource.getRecommendation(id);
     } on SocketException catch (e) {
       throw Exception(e.message);
     }

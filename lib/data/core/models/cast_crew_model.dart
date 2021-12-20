@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
+
 class CastCrewModel {
   bool? adult;
   int? gender;

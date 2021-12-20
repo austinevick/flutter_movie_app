@@ -17,6 +17,9 @@ class MovieCastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String getImage(CastCrewModel cast) =>
+        '${ApiConstants.BASE_IMAGE_URL}${cast.profilePath}';
+
     return Consumer(builder: (context, watch, child) {
       return watch.watch(_castCrewProvider(id!)).when(
           data: (casts) => SingleChildScrollView(
@@ -35,14 +38,15 @@ class MovieCastCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
                                     fit: BoxFit.cover,
-                                    imageUrl:
-                                        '${ApiConstants.BASE_IMAGE_URL}${cast.profilePath}',
+                                    imageUrl: getImage(cast),
                                     placeholder: (context, url) => const Center(
                                             child: SpinKitDoubleBounce(
                                           color: Colors.grey,
                                         ))),
                               ),
-                              Text(cast.name!, overflow: TextOverflow.ellipsis)
+                              Text(cast.name!,
+                                  style: const TextStyle(color: Colors.black),
+                                  overflow: TextOverflow.ellipsis)
                             ],
                           ),
                         ));
@@ -57,41 +61,3 @@ class MovieCastCard extends StatelessWidget {
     });
   }
 }
-
-
-/*
-
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(snapshot.data!.length, (i) {
-                final cast = snapshot.data![i];
-                return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SizedBox(
-                      height: 180,
-                      width: 100,
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl:
-                                    '${ApiConstants.BASE_IMAGE_URL}${cast.profilePath}',
-                                placeholder: (context, url) => const Center(
-                                        child: SpinKitDoubleBounce(
-                                      color: Colors.grey,
-                                    ))),
-                          ),
-                          Text(cast.name!, overflow: TextOverflow.ellipsis)
-                        ],
-                      ),
-                    ));
-              }),
-            ),
-          );
-        
-
-
-*/
