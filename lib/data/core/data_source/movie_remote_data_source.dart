@@ -2,6 +2,7 @@ import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/movie_trailer_model.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
 
 import '../api_client.dart';
@@ -15,6 +16,7 @@ abstract class MovieRemoteDataSource {
   Future<MovieDetailModel> getDetails(int id);
   Future<List<CastCrewModel>> getCastCrew(int id);
   Future<List<RecommendationModel>> getRecommendation(int id);
+  Future<List<MovieTrailerModel>> getmovieVideo(int id);
 }
 
 class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
@@ -82,6 +84,14 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
   Future<List<RecommendationModel>> getRecommendation(int id) async {
     final response = await _client.get('movie/$id/recommendations');
     final movies = RecommendationResult.fromJson(response).results;
+    print(movies);
+    return movies!;
+  }
+
+  @override
+  Future<List<MovieTrailerModel>> getmovieVideo(int id) async {
+    final response = await _client.get('movie/$id/videos');
+    final movies = MovieTrailerResult.fromMap(response).results;
     print(movies);
     return movies!;
   }
