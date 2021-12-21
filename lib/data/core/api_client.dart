@@ -19,4 +19,16 @@ class ApiClient {
       throw Exception(response.reasonPhrase);
     }
   }
+
+  dynamic getSearchMovies(String searchTerm) async {
+    final response = await _client.get(
+        Uri.parse(
+            '${ApiConstants.BASE_URL}search/movies?api_key=${ApiConstants.API_KEY}&query=$searchTerm'),
+        headers: {'content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(response.reasonPhrase);
+    }
+  }
 }

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_carousel/movie_carousel_widget.dart';
 import 'package:flutter_riverpod_movie_app/screens/top_rated/top_rated_movies_card.dart';
+import 'package:flutter_riverpod_movie_app/screens/upcoming/upcoming_movies_card.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'movie_search_screen.dart';
 import 'movie_tab/movie_tabs.dart';
 
 final movieFutureProvider = FutureProvider((ref) async {
@@ -17,7 +19,7 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
         child: Scaffold(
       body: NestedScrollView(
@@ -25,11 +27,14 @@ class HomeScreen extends ConsumerWidget {
                 SliverAppBar(
                   title: const Text('Movies'),
                   actions: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+                    IconButton(
+                        onPressed: () => showSearch(
+                            context: context, delegate: MovieSearchScreen()),
+                        icon: const Icon(Icons.search))
                   ],
                 )
               ],
-          body: watch.watch(movieFutureProvider).when(
+          body: ref.watch(movieFutureProvider).when(
                 error: (error, stackTrace) => Text(error.toString()),
                 loading: () => const Center(
                     child: SpinKitDoubleBounce(
@@ -38,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
                 data: (movies) {
                   return RefreshIndicator(
                     onRefresh: () =>
-                        watch.read(movieProvider).getTrendingMovies(),
+                        ref.read(movieProvider).getTrendingMovies(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
@@ -61,7 +66,14 @@ class HomeScreen extends ConsumerWidget {
                               style: TextStyle(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 12),
-                            const TopRatedMovieCard()
+                            const TopRatedMovieCard(),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Upcoming',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(height: 12),
+                            const UpcomingMoviesCard()
                           ],
                         ),
                       ),

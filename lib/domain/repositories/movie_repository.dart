@@ -46,6 +46,22 @@ class MovieRepository {
     }
   }
 
+  Future<List<MovieEntity>> getUpcomingMovies() async {
+    try {
+      return await remoteDataSource.getUpcomingMovies();
+    } on SocketException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Future<List<MovieEntity>> getSearchMovies(String searchTerm) async {
+    try {
+      return await remoteDataSource.getSearchMovies(searchTerm);
+    } on SocketException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
   Future<List<MovieEntity>> getTopRated() async {
     try {
       return await remoteDataSource.getTopRated();
