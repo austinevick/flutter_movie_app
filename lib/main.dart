@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/screens/home_screen.dart';
@@ -40,7 +41,14 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: LayoutBuilder(builder: (context, constraints) {
+          body: PageTransitionSwitcher(
+        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+          return FadeThroughTransition(
+              animation: primaryAnimation,
+              child: child,
+              secondaryAnimation: secondaryAnimation);
+        },
+        child: LayoutBuilder(builder: (context, constraints) {
           return GestureDetector(
             onTap: isExpanded ? () => setState(() => isExpanded = false) : null,
             child: Container(
@@ -72,7 +80,7 @@ class _HomeState extends State<Home> {
             ),
           );
         }),
-      ),
+      )),
     );
   }
 
@@ -163,4 +171,15 @@ class _HomeState extends State<Home> {
                   icon: const Icon(Icons.keyboard_arrow_down)))
         ],
       );
+}
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text('Hello')),
+    );
+  }
 }

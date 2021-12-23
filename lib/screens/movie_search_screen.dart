@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
+import 'package:flutter_riverpod_movie_app/screens/widgets/movie_search_list_view.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final _movieSearchProvider =
@@ -40,12 +43,10 @@ class MovieSearchScreen extends SearchDelegate {
       builder: (context, watch, child) {
         return watch.watch(_movieSearchProvider(query)).when(
             data: (movies) {
-              return Column(
-                children:
-                    List.generate(movies.length, (i) => Text(movies[i].title!)),
-              );
+              return MovieSearchListView(movies: movies);
             },
-            error: (error, stackTrace) => Text('Error loading'),
+            error: (error, stackTrace) =>
+                const Center(child: Text('Search movies')),
             loading: () => const Center(
                     child: SpinKitDoubleBounce(
                   color: Colors.grey,
@@ -56,6 +57,19 @@ class MovieSearchScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container();
+    return Consumer(
+      builder: (context, watch, child) {
+        return watch.watch(_movieSearchProvider(query)).when(
+            data: (movies) {
+              return MovieSearchListView(movies: movies);
+            },
+            error: (error, stackTrace) =>
+                const Center(child: Text('Search a movie')),
+            loading: () => const Center(
+                    child: SpinKitDoubleBounce(
+                  color: Colors.grey,
+                )));
+      },
+    );
   }
 }
