@@ -1,16 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
-import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/movie_detail_widget.dart';
-import 'package:flutter_riverpod_movie_app/screens/movie_detail/movie_recommendation_card.dart';
-import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import 'movie_cast_card.dart';
 
 final _movieDetailsProvider = FutureProvider.family((ref, int id) async {
   return ref.read(movieProvider).getMovieDetails(id);
@@ -33,7 +27,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id);
     return Consumer(builder: (context, watch, child) {
       return SafeArea(
           child: Scaffold(
@@ -77,9 +70,3 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     });
   }
 }
-
-//  Center(
-//               child: MaterialButton(
-//                   minWidth: double.infinity,
-//                   onPressed: () => setState(() => isExpanded = true),
-//                   child: const Icon(Icons.keyboard_arrow_down))),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
-import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -53,7 +52,7 @@ class MovieCastCard extends StatelessWidget {
                   }),
                 ),
               ),
-          error: (error, stackTrace) => Text('Error loading'),
+          error: (error, stackTrace) => Center(child: Text(error.toString())),
           loading: () => const Center(
                   child: SpinKitDoubleBounce(
                 color: Colors.grey,

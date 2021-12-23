@@ -35,7 +35,8 @@ class HomeScreen extends ConsumerWidget {
                 )
               ],
           body: ref.watch(movieFutureProvider).when(
-                error: (error, stackTrace) => Text(error.toString()),
+                error: (error, stackTrace) =>
+                    Center(child: Text(error.toString())),
                 loading: () => const Center(
                     child: SpinKitDoubleBounce(
                   color: Colors.grey,

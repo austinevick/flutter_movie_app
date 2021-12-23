@@ -17,11 +17,11 @@ class ComingSoonMovieTab extends ConsumerWidget {
   const ComingSoonMovieTab(this.movies, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, watch) {
-    final movie = watch.watch(_comingSoonMovieFutureProvider);
+  Widget build(BuildContext context, ref) {
+    final movie = ref.watch(_comingSoonMovieFutureProvider);
     return movie.when(
         data: (movies) => SizedBox(height: 230, child: MovieListView(movies)),
-        error: (error, stackTrace) => Text(error.toString()),
+        error: (error, stackTrace) => Center(child: Text(error.toString())),
         loading: () => const Center(
                 child: SpinKitDoubleBounce(
               color: Colors.grey,
