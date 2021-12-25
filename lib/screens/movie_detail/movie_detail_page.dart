@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
+import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/movie_detail_widget.dart';
@@ -10,29 +10,21 @@ final _movieDetailsProvider = FutureProvider.family((ref, int id) async {
   return ref.read(movieProvider).getMovieDetails(id);
 });
 
-class MovieDetailPage extends StatefulWidget {
+class MovieDetailPage extends StatelessWidget {
   final int? id;
 
   const MovieDetailPage({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<MovieDetailPage> createState() => _MovieDetailPageState();
-}
-
-class _MovieDetailPageState extends State<MovieDetailPage> {
-  bool isExpanded = false;
-
-  String getImage(MovieDetailModel movie) =>
-      '${ApiConstants.BASE_IMAGE_URL}${movie.posterPath}';
-
-  @override
   Widget build(BuildContext context) {
+    String getImage(MovieDetailModel movie) =>
+        '$BASE_IMAGE_URL${movie.posterPath}';
     return Consumer(builder: (context, watch, child) {
       return SafeArea(
           child: Scaffold(
-        body: watch.watch(_movieDetailsProvider(widget.id!)).when(
+        body: watch.watch(_movieDetailsProvider(id!)).when(
               error: (error, stackTrace) => const Center(
-                child: Text('Error fetching movies'),
+                child: Text('Something went wrong'),
               ),
               loading: () => const Center(
                   child: SpinKitDoubleBounce(
@@ -55,14 +47,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                             Colors.black,
                           ])),
                       child: MovieDetailWidget(constraints, movie)),
-                  decoration: isExpanded
-                      ? null
-                      : BoxDecoration(
-                          image: DecorationImage(
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black54, BlendMode.darken),
-                              alignment: Alignment.topCenter,
-                              image: NetworkImage(getImage(movie)))),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black54, BlendMode.darken),
+                          alignment: Alignment.topCenter,
+                          image: NetworkImage(getImage(movie)))),
                 );
               }),
             ),

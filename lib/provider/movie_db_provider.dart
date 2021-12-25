@@ -1,18 +1,33 @@
-import 'package:flutter_riverpod_movie_app/data/core/models/database/movie_db_model.dart';
-import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
+import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_local_data_source.dart';
+import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
+import 'package:hive/hive.dart';
 
-class MovieDBProvider {
-  MovieDBHelper dbHelper = MovieDBHelper();
+final movieDBProvider =
+    ChangeNotifierProvider<MovieDBProvider>((ref) => MovieDBProvider());
+
+class MovieDBProvider extends ChangeNotifier {
+  final localDataSource = MovieLocalDataSource();
+  Box movieBox = Hive.box(DBNAME);
 
   Future<List<MovieDBModel>> getFavouriteMovies() async {
-    return await dbHelper.getMovies();
+    return await localDataSource.getMovies();
   }
 
-  Future<MovieDBModel> saveFavouriteMovies(MovieDBModel movies) async {
-    return await dbHelper.save(movies);
+  Future<void> deleteFavouriteMovies(int id) async {
+    return await localDataSource.deleteMovie(id);
   }
 
-  Future<int> deleteFavouriteMovies(int id) async {
-    return await dbHelper.deleteMovie(id);
+  Future<void> toggleFavoriteMovie(MovieDBModel movie) async {
+    final movieBox = await Hive.openBox(DBNAME);
+    if (movieBox.containsKey(movie.id)) {
+      await localDataSource.deleteMovie(movie.id!);
+    } else {
+      await localDataSource.saveMovie(movie);
+    }
+    await getFavouriteMovies();
+    notifyListeners();
   }
 }

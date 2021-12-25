@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/api_constant.dart';
+import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -16,8 +16,7 @@ class MovieCastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String getImage(CastCrewModel cast) =>
-        '${ApiConstants.BASE_IMAGE_URL}${cast.profilePath}';
+    String getImage(CastCrewModel cast) => '$BASE_IMAGE_URL${cast.profilePath}';
 
     return Consumer(builder: (context, watch, child) {
       return watch.watch(_castCrewProvider(id!)).when(

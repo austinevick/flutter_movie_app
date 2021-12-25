@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/provider/movie_db_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
+import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
 
 class MovieDetailWidget extends StatelessWidget {
   final BoxConstraints constraints;
@@ -21,7 +24,25 @@ class MovieDetailWidget extends StatelessWidget {
               IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.keyboard_backspace, size: 28)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
+              Consumer(
+                builder: (context, watch, child) {
+                  final ref = watch.read(movieDBProvider);
+                  return IconButton(
+                      onPressed: () {
+                        final movies = MovieDBModel(
+                            date: DateTime.now(),
+                            title: movie.title,
+                            id: movie.id,
+                            image: movie.posterPath);
+                        print(movies);
+                        ref.toggleFavoriteMovie(movies);
+                      },
+                      icon: ref.movieBox.containsKey(movie.id)
+                          ? const Icon(Icons.favorite,
+                              color: Colors.red, size: 28)
+                          : const Icon(Icons.favorite_border, size: 28));
+                },
+              )
             ],
           ),
           const Spacer(flex: 7),

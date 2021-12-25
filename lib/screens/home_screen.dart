@@ -6,8 +6,10 @@ import 'package:flutter_riverpod_movie_app/screens/top_rated/top_rated_movies_ca
 import 'package:flutter_riverpod_movie_app/screens/upcoming/upcoming_movies_card.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'favourite_movies/favourite_movies_screen.dart';
 import 'movie_search_screen.dart';
 import 'movie_tab/movie_tabs.dart';
+import 'widgets/movie_header_text.dart';
 
 final _movieFutureProvider = FutureProvider((ref) async {
   final movieRef = ref.read(movieProvider);
@@ -22,66 +24,63 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
         child: Scaffold(
-      body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverAppBar(
-                  title: const Text('Movies'),
-                  actions: [
-                    IconButton(
-                        onPressed: () => showSearch(
-                            context: context, delegate: MovieSearchScreen()),
-                        icon: const Icon(Icons.search))
-                  ],
-                )
-              ],
-          body: ref.watch(_movieFutureProvider).when(
+            body: ref.watch(_movieFutureProvider).when(
                 error: (error, stackTrace) =>
-                    Center(child: Text(error.toString())),
+                    const Center(child: Text('No Internet Connection')),
                 loading: () => const Center(
-                    child: SpinKitDoubleBounce(
-                  color: Colors.grey,
-                )),
-                data: (movies) {
-                  return RefreshIndicator(
-                    onRefresh: () =>
-                        ref.read(movieProvider).getTrendingMovies(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 12),
-                            const Text(
-                              'Trending',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            MovieCarouselWidget(
-                              movies: movies,
-                            ),
-                            const SizedBox(height: 16),
-                            const MovieTabs(),
-                            const SizedBox(height: 12),
-                            const Text(
-                              'Top Rated',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            const SizedBox(height: 12),
-                            const TopRatedMovieCard(),
-                            const SizedBox(height: 12),
-                            const Text(
-                              'Upcoming',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            const SizedBox(height: 12),
-                            const UpcomingMoviesCard()
+                        child: SpinKitDoubleBounce(
+                      color: Colors.grey,
+                    )),
+                data: (movies) => CustomScrollView(
+                      slivers: [
+                        SliverAppBar(
+                          floating: true,
+                          title: const Text('Movies'),
+                          actions: [
+                            IconButton(
+                                onPressed: () => showSearch(
+                                    context: context,
+                                    delegate: MovieSearchScreen()),
+                                icon: const Icon(Icons.search)),
+                            IconButton(
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const FavouriteMoviesScreen())),
+                                icon: const Icon(Icons.favorite))
                           ],
                         ),
-                      ),
-                    ),
-                  );
-                },
-              )),
-    ));
+                        SliverList(
+                            delegate: SliverChildListDelegate.fixed([
+                          RefreshIndicator(
+                            onRefresh: () =>
+                                ref.read(movieProvider).getTrendingMovies(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 12),
+                                const MovieHeaderText(text: 'Trending'),
+                                const SizedBox(height: 12),
+                                MovieCarouselWidget(
+                                  movies: movies,
+                                ),
+                                const SizedBox(height: 16),
+                                const MovieTabs(),
+                                const SizedBox(height: 12),
+                                const MovieHeaderText(
+                                  text: 'Top Rated',
+                                ),
+                                const SizedBox(height: 12),
+                                const TopRatedMovieCard(),
+                                const SizedBox(height: 12),
+                                const MovieHeaderText(text: 'Upcoming'),
+                                const SizedBox(height: 12),
+                                const UpcomingMoviesCard()
+                              ],
+                            ),
+                          )
+                        ]))
+                      ],
+                    ))));
   }
 }
