@@ -22,5 +22,6 @@ class MovieLocalDataSource {
   Future<void> deleteMovie(int id) async {
     final movieBox = await Hive.openBox(DBNAME);
     await movieBox.delete(id);
+    await getMovies();
   }
 }

@@ -5,10 +5,9 @@ import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_local_dat
 import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
 import 'package:hive/hive.dart';
 
-final movieDBProvider =
-    ChangeNotifierProvider<MovieDBProvider>((ref) => MovieDBProvider());
+final movieDBProvider = Provider<MovieDBProvider>((ref) => MovieDBProvider());
 
-class MovieDBProvider extends ChangeNotifier {
+class MovieDBProvider {
   final localDataSource = MovieLocalDataSource();
   Box movieBox = Hive.box(DBNAME);
 
@@ -28,6 +27,5 @@ class MovieDBProvider extends ChangeNotifier {
       await localDataSource.saveMovie(movie);
     }
     await getFavouriteMovies();
-    notifyListeners();
   }
 }
