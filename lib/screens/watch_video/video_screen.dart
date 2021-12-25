@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_trailer_model.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/video_arguments.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -14,14 +13,14 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
-  late List<MovieTrailerModel> videos;
   late YoutubePlayerController controller;
+  String _title = '';
   @override
   void initState() {
-    videos = widget.arguments.videos!;
+    _title = widget.arguments.videos![0].name!;
     controller = YoutubePlayerController(
-        initialVideoId: videos[0].key!,
-        flags: const YoutubePlayerFlags(autoPlay: true, loop: true));
+        initialVideoId: widget.arguments.videos![0].key!,
+        flags: const YoutubePlayerFlags(autoPlay: true));
     super.initState();
   }
 
@@ -36,10 +35,12 @@ class _VideoScreenState extends State<VideoScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Trailers'),
+          title: Text(_title),
         ),
         body: YoutubePlayerBuilder(
           player: YoutubePlayer(
+            progressIndicatorColor: Colors.red,
+            showVideoProgressIndicator: true,
             controller: controller,
           ),
           builder: (context, child) {
@@ -50,41 +51,42 @@ class _VideoScreenState extends State<VideoScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: List.generate(
-                            videos.length,
-                            (i) => Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        controller.load(videos[i].key!);
-                                        controller.play();
-                                      },
-                                      child: SizedBox(
-                                        height: 150,
-                                        width: 150,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CachedNetworkImage(
-                                              placeholder: (context, url) =>
-                                                  const SpinKitDoubleBounce(
-                                                    color: Colors.grey,
-                                                  ),
-                                              fit: BoxFit.cover,
-                                              imageUrl:
-                                                  YoutubePlayer.getThumbnail(
-                                                      videoId: videos[i].key!,
-                                                      quality: ThumbnailQuality
-                                                          .high)),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(videos[i].name!),
-                                    ))
-                                  ],
-                                ))),
+                        children:
+                            List.generate(widget.arguments.videos!.length, (i) {
+                          final video = widget.arguments.videos![i];
+                          return GestureDetector(
+                            onTap: () {
+                              controller.load(video.key!);
+                              controller.play();
+                              setState(() => _title = video.name!);
+                            },
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 150,
+                                  width: 150,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CachedNetworkImage(
+                                        placeholder: (context, url) =>
+                                            const SpinKitDoubleBounce(
+                                              color: Colors.grey,
+                                            ),
+                                        fit: BoxFit.cover,
+                                        imageUrl: YoutubePlayer.getThumbnail(
+                                            videoId: video.key!,
+                                            quality: ThumbnailQuality.high)),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(video.name!),
+                                ))
+                              ],
+                            ),
+                          );
+                        })),
                   ),
                 )
               ],

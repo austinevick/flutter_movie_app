@@ -18,13 +18,9 @@ class MovieDetailWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: const CircleAvatar(
-                  backgroundColor: Color(0xff333742),
-                  child: Icon(Icons.keyboard_backspace, color: Colors.white),
-                ),
-              ),
+              IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.keyboard_backspace, size: 28)),
               IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
             ],
           ),

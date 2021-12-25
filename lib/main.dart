@@ -15,11 +15,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Movie App',
         theme: ThemeData.dark().copyWith(
             appBarTheme: const AppBarTheme(backgroundColor: Color(0xff191a32)),
             scaffoldBackgroundColor: const Color(0xff191a32),
             textTheme: TextTheme(
+                headline6: GoogleFonts.lobster(),
                 bodyText2: GoogleFonts.lobster(),
                 bodyText1: GoogleFonts.lobster())),
         home: const HomeScreen(),

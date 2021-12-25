@@ -9,7 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'movie_search_screen.dart';
 import 'movie_tab/movie_tabs.dart';
 
-final movieFutureProvider = FutureProvider((ref) async {
+final _movieFutureProvider = FutureProvider((ref) async {
   final movieRef = ref.read(movieProvider);
   final movies = await movieRef.getTrendingMovies();
   return movies;
@@ -34,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 )
               ],
-          body: ref.watch(movieFutureProvider).when(
+          body: ref.watch(_movieFutureProvider).when(
                 error: (error, stackTrace) =>
                     Center(child: Text(error.toString())),
                 loading: () => const Center(
