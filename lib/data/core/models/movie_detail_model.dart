@@ -9,11 +9,11 @@ class MovieDetailModel {
   final String posterPath;
   final String title;
   final String releaseDate;
-  final bool video;
+  bool isFavorite;
   final double voteAverage;
   final int voteCount;
   final String backdropPath;
-  const MovieDetailModel({
+  MovieDetailModel({
     required this.releaseDate,
     required this.genres,
     required this.homepage,
@@ -24,7 +24,7 @@ class MovieDetailModel {
     required this.popularity,
     required this.posterPath,
     required this.title,
-    required this.video,
+    this.isFavorite = false,
     required this.voteAverage,
     required this.voteCount,
     required this.backdropPath,
@@ -43,7 +43,6 @@ class MovieDetailModel {
       popularity: map['popularity']?.toDouble() ?? 0.0,
       posterPath: map['poster_path'],
       title: map['title'] ?? '',
-      video: map['video'] ?? false,
       voteAverage: map['vote_average']?.toDouble() ?? 0.0,
       voteCount: map['vote_count']?.toInt() ?? 0,
       backdropPath: map['backdrop_path'] ?? '',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/screens/movie_detail/similar_movies_card.dart';
 
 import 'movie_cast_card.dart';
 import 'movie_recommendation_card.dart';
@@ -46,6 +47,16 @@ class BottomSheetContent extends StatelessWidget {
                       height: 200,
                       width: constraints.maxWidth,
                       child: MovieCastCard(id: movie.id)),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8, top: 8),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Similar movies',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                  ),
+                  SimilarMoviesCard(id: movie.id),
                   const Padding(
                     padding: EdgeInsets.only(left: 8, top: 8),
                     child: Align(

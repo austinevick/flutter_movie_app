@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_local_data_source.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
-import 'package:flutter_riverpod_movie_app/provider/movie_db_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
 import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
 
-class MovieDetailWidget extends StatelessWidget {
+class MovieDetailWidget extends StatefulWidget {
   final BoxConstraints constraints;
   final MovieDetailModel movie;
   const MovieDetailWidget(this.constraints, this.movie, {Key? key})
       : super(key: key);
+
+  @override
+  State<MovieDetailWidget> createState() => _MovieDetailWidgetState();
+}
+
+class _MovieDetailWidgetState extends State<MovieDetailWidget> {
+  MovieLocalDataSource localDataSource = MovieLocalDataSource();
+
+  Widget buildIconButton() {
+    bool isFavorite = localDataSource.movieBox.containsKey(widget.movie.id);
+    return IconButton(
+        onPressed: () async {
+          setState(() => isFavorite = !isFavorite);
+          final movies = MovieDBModel(
+              date: DateTime.now(),
+              title: widget.movie.title,
+              id: widget.movie.id,
+              image: widget.movie.posterPath);
+          if (localDataSource.movieBox.containsKey(widget.movie.id)) {
+            await localDataSource.deleteMovie(widget.movie.id);
+          } else {
+            await localDataSource.saveMovie(movies);
+          }
+        },
+        icon: isFavorite
+            ? const Icon(Icons.favorite, color: Colors.red, size: 28)
+            : const Icon(Icons.favorite_border, size: 28));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,37 +51,19 @@ class MovieDetailWidget extends StatelessWidget {
               IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.keyboard_backspace, size: 28)),
-              Consumer(
-                builder: (context, watch, child) {
-                  final ref = watch.read(movieDBProvider);
-                  return IconButton(
-                      onPressed: () {
-                        final movies = MovieDBModel(
-                            date: DateTime.now(),
-                            title: movie.title,
-                            id: movie.id,
-                            image: movie.posterPath);
-                        print(movies);
-                        ref.toggleFavoriteMovie(movies);
-                      },
-                      icon: ref.movieBox.containsKey(movie.id)
-                          ? const Icon(Icons.favorite,
-                              color: Colors.red, size: 28)
-                          : const Icon(Icons.favorite_border, size: 28));
-                },
-              )
+              buildIconButton()
             ],
           ),
           const Spacer(flex: 7),
           Center(
               child: Text(
-            movie.title,
+            widget.movie.title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
           )),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: movie.genres
+            children: widget.movie.genres
                 .map((e) => Text(
                       e.name,
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -65,7 +74,7 @@ class MovieDetailWidget extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              movie.releaseDate,
+              widget.movie.releaseDate,
               style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
             ),
           ),
@@ -88,11 +97,11 @@ class MovieDetailWidget extends StatelessWidget {
               )),
           const SizedBox(height: 8),
           Text(
-            movie.overview,
+            widget.movie.overview,
             style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           const SizedBox(height: 10),
-          VideosWidget(id: movie.id),
+          VideosWidget(id: widget.movie.id),
           Center(
               child: MaterialButton(
                   minWidth: double.infinity,
@@ -101,7 +110,8 @@ class MovieDetailWidget extends StatelessWidget {
                       enableDrag: false,
                       barrierColor: Colors.black.withOpacity(0.3),
                       context: context,
-                      builder: (ctx) => BottomSheetContent(movie, constraints)),
+                      builder: (ctx) =>
+                          BottomSheetContent(widget.movie, widget.constraints)),
                   child: const Icon(Icons.keyboard_arrow_down))),
         ],
       ),

@@ -39,6 +39,14 @@ class MovieRepository {
     }
   }
 
+  Future<List<MovieEntity>> getSimilarMovies(int id) async {
+    try {
+      return await remoteDataSource.getSimilarMovies(id);
+    } on SocketException {
+      throw Exception('No Internet connection');
+    }
+  }
+
   Future<List<MovieEntity>> getTrending() async {
     try {
       return await remoteDataSource.getTrending();

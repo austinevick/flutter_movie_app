@@ -64,6 +64,10 @@ class MovieNotifierProvider extends ChangeNotifier {
     return await repository.getSearchMovies(searchTerm);
   }
 
+  Future<List<MovieEntity>> getSimilarMovies(int id) async {
+    return await repository.getSimilarMovies(id);
+  }
+
   Future<List<MovieEntity>> getUpcomingMovies() async {
     return await repository.getUpcomingMovies();
   }
