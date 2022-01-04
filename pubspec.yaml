@@ -33,7 +33,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#191a32"
-  image: assets/app_logo.png
+  
 
   flutter_test:
     sdk: flutter
