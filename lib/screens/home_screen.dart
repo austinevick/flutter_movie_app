@@ -33,21 +33,23 @@ class HomeScreen extends ConsumerWidget {
                     )),
                 data: (movies) => CustomScrollView(
                       slivers: [
-                        SliverAppBar(
+                        const SliverAppBar(
+                          centerTitle: true,
                           floating: true,
-                          title: const Text('Movies'),
+                          title: Text('Movies'),
                           actions: [
-                            IconButton(
-                                onPressed: () => showSearch(
-                                    context: context,
-                                    delegate: MovieSearchScreen()),
-                                icon: const Icon(Icons.search)),
-                            IconButton(
-                                onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            const FavouriteMoviesScreen())),
-                                icon: const Icon(Icons.favorite))
+                            // IconButton(
+                            //     onPressed: () => showSearch(
+                            //         context: context,
+                            //         delegate: MovieSearchScreen()),
+                            //     icon: const Icon(Icons.search)),
+                            // IconButton(
+                            //     onPressed: () => Navigator.of(context).push(
+                            //         MaterialPageRoute(
+                            //             builder: (ctx) =>
+                            //                 const FavouriteMoviesScreen())),
+                            //     icon: const Icon(Icons.favorite)),
+                            // const SizedBox(width: 8)
                           ],
                         ),
                         SliverList(

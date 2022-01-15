@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
 import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_local_data_source.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
 import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
+import 'package:hive/hive.dart';
 
 class MovieDetailWidget extends StatefulWidget {
   final BoxConstraints constraints;
@@ -18,8 +20,9 @@ class MovieDetailWidget extends StatefulWidget {
 class _MovieDetailWidgetState extends State<MovieDetailWidget> {
   MovieLocalDataSource localDataSource = MovieLocalDataSource();
 
-  Widget buildIconButton() {
-    bool isFavorite = localDataSource.movieBox.containsKey(widget.movie.id);
+  buildIconButton() async {
+    final box = await Hive.openBox(DBNAME);
+    bool isFavorite = box.containsKey(widget.movie.id);
     return IconButton(
         onPressed: () async {
           setState(() => isFavorite = !isFavorite);
@@ -28,7 +31,7 @@ class _MovieDetailWidgetState extends State<MovieDetailWidget> {
               title: widget.movie.title,
               id: widget.movie.id,
               image: widget.movie.posterPath);
-          if (localDataSource.movieBox.containsKey(widget.movie.id)) {
+          if (isFavorite) {
             await localDataSource.deleteMovie(widget.movie.id);
           } else {
             await localDataSource.saveMovie(movies);
@@ -51,7 +54,6 @@ class _MovieDetailWidgetState extends State<MovieDetailWidget> {
               IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.keyboard_backspace, size: 28)),
-              buildIconButton()
             ],
           ),
           const Spacer(flex: 7),

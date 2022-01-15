@@ -7,8 +7,6 @@ final movieLocalDataSourceProvider =
     Provider<MovieLocalDataSource>((ref) => MovieLocalDataSource());
 
 class MovieLocalDataSource {
-  Box movieBox = Hive.box(DBNAME);
-
   Future<void> saveMovie(MovieDBModel movie) async {
     final movieBox = await Hive.openBox(DBNAME);
 
