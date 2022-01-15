@@ -1,7 +1,7 @@
 # flutter_riverpod_movie_app
-
 A new Flutter project.
 
+- [View Screenshot](https://www.canva.com/design/DAE0uD5YTTA/XOkcZ9_ASUzz_aEBs2VM_g/view?utm_content=DAE0uD5YTTA&utm_campaign=designshare&utm_medium=link&utm_source=shareyourdesignpanel)
 ## Getting Started
 
 This project is a starting point for a Flutter application.
