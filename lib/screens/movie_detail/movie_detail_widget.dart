@@ -18,30 +18,6 @@ class MovieDetailWidget extends StatefulWidget {
 }
 
 class _MovieDetailWidgetState extends State<MovieDetailWidget> {
-  MovieLocalDataSource localDataSource = MovieLocalDataSource();
-
-  buildIconButton() async {
-    final box = await Hive.openBox(DBNAME);
-    bool isFavorite = box.containsKey(widget.movie.id);
-    return IconButton(
-        onPressed: () async {
-          setState(() => isFavorite = !isFavorite);
-          final movies = MovieDBModel(
-              date: DateTime.now(),
-              title: widget.movie.title,
-              id: widget.movie.id,
-              image: widget.movie.posterPath);
-          if (isFavorite) {
-            await localDataSource.deleteMovie(widget.movie.id);
-          } else {
-            await localDataSource.saveMovie(movies);
-          }
-        },
-        icon: isFavorite
-            ? const Icon(Icons.favorite, color: Colors.red, size: 28)
-            : const Icon(Icons.favorite_border, size: 28));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(

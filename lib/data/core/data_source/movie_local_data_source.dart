@@ -13,6 +13,11 @@ class MovieLocalDataSource {
     await movieBox.put(movie.id, movie);
   }
 
+  Future<bool> getId(int movie) async {
+    final movieBox = await Hive.openBox(DBNAME);
+    return movieBox.containsKey(movie);
+  }
+
   Future<List<MovieDBModel>> getMovies() async {
     final movieBox = await Hive.openBox(DBNAME);
     final movieIds = movieBox.keys;

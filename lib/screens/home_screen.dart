@@ -33,16 +33,16 @@ class HomeScreen extends ConsumerWidget {
                     )),
                 data: (movies) => CustomScrollView(
                       slivers: [
-                        const SliverAppBar(
+                        SliverAppBar(
                           centerTitle: true,
                           floating: true,
-                          title: Text('Movies'),
+                          title: const Text('Movies'),
                           actions: [
-                            // IconButton(
-                            //     onPressed: () => showSearch(
-                            //         context: context,
-                            //         delegate: MovieSearchScreen()),
-                            //     icon: const Icon(Icons.search)),
+                            IconButton(
+                                onPressed: () => showSearch(
+                                    context: context,
+                                    delegate: MovieSearchScreen()),
+                                icon: const Icon(Icons.search)),
                             // IconButton(
                             //     onPressed: () => Navigator.of(context).push(
                             //         MaterialPageRoute(
