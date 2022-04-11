@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
-import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_local_data_source.dart';
 import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
-import 'package:flutter_riverpod_movie_app/domain/movie_database/movie_db_model.dart';
-import 'package:hive/hive.dart';
 
 class MovieDetailWidget extends StatefulWidget {
   final BoxConstraints constraints;
@@ -18,6 +14,7 @@ class MovieDetailWidget extends StatefulWidget {
 }
 
 class _MovieDetailWidgetState extends State<MovieDetailWidget> {
+  saveMovieToLocalStorage() {}
   @override
   Widget build(BuildContext context) {
     return Padding(

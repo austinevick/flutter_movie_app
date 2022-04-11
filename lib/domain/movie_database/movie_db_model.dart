@@ -1,24 +1,53 @@
-import 'package:hive/hive.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
 
-part 'movie_db_model.g.dart';
+import 'package:flutter/material.dart';
 
-@HiveType(typeId: 0)
-class MovieDBModel {
-  @HiveField(0)
-  final int? id;
-  @HiveField(1)
-  final String? title;
-  @HiveField(2)
+class ModelDBModel {
+  int? id;
   final String? image;
-  @HiveField(3)
-  final DateTime? date;
-  @HiveField(4)
+  final String? title;
   final bool? isFavourite;
-  MovieDBModel({
+  ModelDBModel({
     this.id,
-    this.title,
     this.image,
-    this.date,
+    this.title,
     this.isFavourite,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'image': image,
+      'title': title,
+      'isFavourite': isFavourite! ? 0 : 1,
+    };
+  }
+
+  factory ModelDBModel.fromMap(Map<String, dynamic> map) {
+    return ModelDBModel(
+      id: map['id']?.toInt(),
+      image: map['image'],
+      title: map['title'],
+      isFavourite: map['isFavourite'] == 0,
+    );
+  }
+}
+
+class Utility {
+  static Image imageFromBase64String(String base64String) {
+    return Image.memory(
+      base64Decode(base64String),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Uint8List dataFromBase64String(String base64String) {
+    return base64Decode(base64String);
+  }
+
+  static String base64String(Uint8List data) {
+    return base64Encode(data);
+  }
 }

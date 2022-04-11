@@ -68,6 +68,16 @@ class _VideoScreenState extends State<VideoScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: CachedNetworkImage(
+                                        errorWidget: (context, error, _) =>
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  image: const DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/app_logo.png')),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                            ),
                                         placeholder: (context, url) =>
                                             const SpinKitDoubleBounce(
                                               color: Colors.grey,

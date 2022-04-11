@@ -8,14 +8,15 @@ import '../../common/extension.dart';
 
 class MovieListView extends StatelessWidget {
   final List<MovieEntity>? movies;
-
-  const MovieListView(this.movies, {Key? key}) : super(key: key);
+  final Axis? scrollDirection;
+  const MovieListView(this.movies, {Key? key, this.scrollDirection})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
+      scrollDirection: scrollDirection ?? Axis.horizontal,
       itemCount: movies!.length,
       itemBuilder: (context, i) => GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -31,6 +32,12 @@ class MovieListView extends StatelessWidget {
                 child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     imageUrl: '$BASE_IMAGE_URL${movies![i].posterPath}',
+                    errorWidget: (context, error, _) => Container(
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('assets/app_logo.png')),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                     placeholder: (context, url) => const Center(
                             child: SpinKitDoubleBounce(
                           color: Colors.grey,

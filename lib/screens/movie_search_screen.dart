@@ -1,73 +1,133 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
-import 'package:flutter_riverpod_movie_app/screens/widgets/movie_search_list_view.dart';
+import 'package:flutter_riverpod_movie_app/common/extension.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
+import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
+import 'package:flutter_riverpod_movie_app/screens/widgets/movie_list_view.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
-final _movieSearchProvider =
-    FutureProvider.family((ref, String searchTerm) async {
-  return ref.read(movieProvider).getSearchMovies(searchTerm);
-});
+import '../data/core/constant.dart';
+import 'movie_detail/movie_detail_page.dart';
 
-class MovieSearchScreen extends SearchDelegate {
+class MovieSearchScreen extends StatefulWidget {
+  const MovieSearchScreen({Key? key}) : super(key: key);
+
   @override
-  ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context).copyWith(
-        inputDecorationTheme: const InputDecorationTheme(
-            enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xff191a32)));
+  State<MovieSearchScreen> createState() => _MovieSearchScreenState();
+}
+
+class _MovieSearchScreenState extends State<MovieSearchScreen> {
+  final controller = TextEditingController();
+  final client = Client();
+  List<MovieModel> searchResult = [];
+  List<MovieModel> movies = [];
+  bool isLoading = false;
+
+  Future<void> getSearchMovies() async {
+    try {
+      setState(() => isLoading = true);
+
+      final response = await client.get(Uri.parse(
+          "https://api.themoviedb.org/3/search/movie?api_key=dcb8565b1508cc35b50fbacaf9f52628&query=${controller.text}"));
+      if (response.statusCode == 200) {
+        setState(() => isLoading = false);
+        final json = jsonDecode(response.body);
+        List<MovieModel>? movies = MoviesResultModel.fromJson(json).movies;
+        setState(() => this.movies = movies!);
+      } else {
+        setState(() => isLoading = false);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar('Something went wrong'));
+      }
+    } on SocketException catch (_) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar('No internet connection'));
+      rethrow;
+    }
   }
 
   @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-          color: query.isEmpty ? Colors.grey : Colors.white,
-          onPressed: () => query = '',
-          icon: const Icon(Icons.clear))
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () => close(context, null),
-        icon: const Icon(Icons.arrow_back_ios));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        return watch.watch(_movieSearchProvider(query)).when(
-            data: (movies) {
-              return MovieSearchListView(movies: movies);
-            },
-            error: (error, stackTrace) =>
-                const Center(child: Text('Search movies')),
-            loading: () => const Center(
-                    child: SpinKitDoubleBounce(
-                  color: Colors.grey,
-                )));
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        return watch.watch(_movieSearchProvider(query)).when(
-            data: (movies) {
-              return MovieSearchListView(movies: movies);
-            },
-            error: (error, stackTrace) =>
-                const Center(child: Text('Search a movie')),
-            loading: () => const Center(
-                    child: SpinKitDoubleBounce(
-                  color: Colors.grey,
-                )));
-      },
-    );
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      body: Column(
+        children: [
+          Material(
+            color: const Color(0xff191a32),
+            elevation: 4,
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.arrow_back_ios)),
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    autofocus: true,
+                    onEditingComplete: () async => await getSearchMovies(),
+                    style: GoogleFonts.lobster(fontSize: 16.8),
+                    decoration: const InputDecoration(
+                        hintText: 'Search movies',
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+              child: isLoading
+                  ? const Center(
+                      child: SpinKitDoubleBounce(
+                      color: Colors.grey,
+                    ))
+                  : movies.isEmpty
+                      ? const Center(child: Text('Search movies'))
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (context, i) => GestureDetector(
+                            onTap: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => MovieDetailPage(
+                                          id: movies[i].id,
+                                        ))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl:
+                                            '$BASE_IMAGE_URL${movies[i].posterPath}',
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                                child: SpinKitDoubleBounce(
+                                              color: Colors.grey,
+                                            ))),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(movies[i].title!.trimText()),
+                                )
+                              ],
+                            ),
+                          ),
+                          itemCount: movies.length,
+                        )),
+        ],
+      ),
+    ));
   }
 }

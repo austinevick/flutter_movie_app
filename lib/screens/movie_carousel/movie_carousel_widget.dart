@@ -29,6 +29,12 @@ class MovieCarouselWidget extends StatelessWidget {
                 child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
+                    errorWidget: (context, error, _) => Container(
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('assets/app_logo.png')),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                     placeholder: (context, url) => const Center(
                             child: SpinKitDoubleBounce(
                           color: Colors.grey,

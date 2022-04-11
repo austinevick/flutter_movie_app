@@ -5,8 +5,6 @@ import 'package:flutter_riverpod_movie_app/screens/movie_carousel/movie_carousel
 import 'package:flutter_riverpod_movie_app/screens/top_rated/top_rated_movies_card.dart';
 import 'package:flutter_riverpod_movie_app/screens/upcoming/upcoming_movies_card.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import 'favourite_movies/favourite_movies_screen.dart';
 import 'movie_search_screen.dart';
 import 'movie_tab/movie_tabs.dart';
 import 'widgets/movie_header_text.dart';
@@ -25,8 +23,11 @@ class HomeScreen extends ConsumerWidget {
     return SafeArea(
         child: Scaffold(
             body: ref.watch(_movieFutureProvider).when(
-                error: (error, stackTrace) =>
-                    const Center(child: Text('No Internet Connection')),
+                error: (error, stackTrace) => const Center(
+                        child: Text(
+                      'Something went wrong',
+                      style: TextStyle(fontSize: 17),
+                    )),
                 loading: () => const Center(
                         child: SpinKitDoubleBounce(
                       color: Colors.grey,
@@ -36,20 +37,14 @@ class HomeScreen extends ConsumerWidget {
                         SliverAppBar(
                           centerTitle: true,
                           floating: true,
-                          title: const Text('Movies'),
+                          title: const Text('Discover Movies'),
                           actions: [
                             IconButton(
-                                onPressed: () => showSearch(
-                                    context: context,
-                                    delegate: MovieSearchScreen()),
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const MovieSearchScreen())),
                                 icon: const Icon(Icons.search)),
-                            // IconButton(
-                            //     onPressed: () => Navigator.of(context).push(
-                            //         MaterialPageRoute(
-                            //             builder: (ctx) =>
-                            //                 const FavouriteMoviesScreen())),
-                            //     icon: const Icon(Icons.favorite)),
-                            // const SizedBox(width: 8)
                           ],
                         ),
                         SliverList(
@@ -69,9 +64,7 @@ class HomeScreen extends ConsumerWidget {
                                 const SizedBox(height: 16),
                                 const MovieTabs(),
                                 const SizedBox(height: 12),
-                                const MovieHeaderText(
-                                  text: 'Top Rated',
-                                ),
+                                const MovieHeaderText(text: 'Top Rated'),
                                 const SizedBox(height: 12),
                                 const TopRatedMovieCard(),
                                 const SizedBox(height: 12),

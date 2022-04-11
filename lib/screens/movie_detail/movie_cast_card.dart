@@ -37,6 +37,15 @@ class MovieCastCard extends StatelessWidget {
                                 child: CachedNetworkImage(
                                     fit: BoxFit.cover,
                                     imageUrl: getImage(cast),
+                                    errorWidget: (context, error, _) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              image: const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/app_logo.png')),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                        ),
                                     placeholder: (context, url) => const Center(
                                             child: SpinKitDoubleBounce(
                                           color: Colors.grey,

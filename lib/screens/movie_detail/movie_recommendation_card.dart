@@ -43,6 +43,16 @@ class MovieRecommendationCard extends StatelessWidget {
                                           fit: BoxFit.cover,
                                           imageUrl:
                                               '$BASE_IMAGE_URL${movie[i].posterPath}',
+                                          errorWidget: (context, error, _) =>
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    image: const DecorationImage(
+                                                        image: AssetImage(
+                                                            'assets/app_logo.png')),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                              ),
                                           placeholder: (context, url) =>
                                               const Center(
                                                   child: SpinKitDoubleBounce(
