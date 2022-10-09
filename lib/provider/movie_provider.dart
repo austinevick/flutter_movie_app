@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_trailer_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
+import 'package:flutter_riverpod_movie_app/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_trailer_model.dart';
+import 'package:flutter_riverpod_movie_app/models/recommendation_model.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/domain/repositories/movie_repository.dart';
 
@@ -58,10 +58,6 @@ class MovieNotifierProvider extends ChangeNotifier {
       notifyListeners();
       return movies;
     });
-  }
-
-  Future<List<MovieEntity>> getSearchMovies(String searchTerm) async {
-    return await repository.getSearchMovies(searchTerm);
   }
 
   Future<List<MovieEntity>> getSimilarMovies(int id) async {

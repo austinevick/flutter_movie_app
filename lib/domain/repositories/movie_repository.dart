@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter_riverpod_movie_app/data/core/api_client.dart';
-import 'package:flutter_riverpod_movie_app/data/core/data_source/movie_remote_data_source.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_trailer_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
+import 'package:flutter_riverpod_movie_app/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_trailer_model.dart';
+import 'package:flutter_riverpod_movie_app/models/recommendation_model.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:http/http.dart';
+
+import '../../repository/api_client.dart';
+import '../../repository/movie_remote_data_source.dart';
 
 class MovieRepository {
   final ApiClient _client = ApiClient(Client());
@@ -58,14 +58,6 @@ class MovieRepository {
   Future<List<MovieEntity>> getUpcomingMovies() async {
     try {
       return await remoteDataSource.getUpcomingMovies();
-    } on SocketException {
-      throw Exception('No Internet connection');
-    }
-  }
-
-  Future<List<MovieEntity>> getSearchMovies(String searchTerm) async {
-    try {
-      return await remoteDataSource.getSearchMovies(searchTerm);
     } on SocketException {
       throw Exception('No Internet connection');
     }

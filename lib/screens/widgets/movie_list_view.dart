@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
 import 'package:flutter_riverpod_movie_app/domain/entities/movie_entity.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/movie_detail_page.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../common/constant.dart';
 import '../../common/extension.dart';
 
 class MovieListView extends StatelessWidget {

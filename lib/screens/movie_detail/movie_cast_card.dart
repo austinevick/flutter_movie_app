@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/models/cast_crew_model.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../common/constant.dart';
 
 final _castCrewProvider = FutureProvider.family((ref, int id) async {
   return ref.read(movieProvider).getMovieCastCrew(id);

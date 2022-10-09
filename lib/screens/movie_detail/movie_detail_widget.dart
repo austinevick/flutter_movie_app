@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/bottom_sheet_content.dart';
 import 'package:flutter_riverpod_movie_app/screens/watch_video/videos_widget.dart';
 

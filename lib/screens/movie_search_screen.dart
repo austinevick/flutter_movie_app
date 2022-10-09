@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod_movie_app/apikey.dart';
 import 'package:flutter_riverpod_movie_app/common/extension.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
-import 'package:flutter_riverpod_movie_app/screens/widgets/movie_list_view.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_result_model.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-
-import '../data/core/constant.dart';
+import '../common/constant.dart';
 import 'movie_detail/movie_detail_page.dart';
 
 class MovieSearchScreen extends StatefulWidget {
@@ -33,7 +31,7 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
       setState(() => isLoading = true);
 
       final response = await client.get(Uri.parse(
-          "https://api.themoviedb.org/3/search/movie?api_key=dcb8565b1508cc35b50fbacaf9f52628&query=${controller.text}"));
+          "https://api.themoviedb.org/3/search/movie?api_key=$API_KEY&query=${controller.text}"));
       if (response.statusCode == 200) {
         setState(() => isLoading = false);
         final json = jsonDecode(response.body);

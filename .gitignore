@@ -31,6 +31,7 @@
 .pub/
 /build/
 /lib/data/core/constant.dart
+lib/apikey.dart
 
 
 # Web related

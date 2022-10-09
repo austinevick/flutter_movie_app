@@ -1,11 +1,11 @@
-import 'package:flutter_riverpod_movie_app/data/core/models/cast_crew_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_result_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_trailer_model.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/recommendation_model.dart';
+import 'package:flutter_riverpod_movie_app/models/cast_crew_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_result_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_trailer_model.dart';
+import 'package:flutter_riverpod_movie_app/models/recommendation_model.dart';
 
-import '../api_client.dart';
+import 'api_client.dart';
 
 abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getTrending();
@@ -14,7 +14,6 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getUpcomingMovies();
   Future<List<MovieModel>> getPlayingNow();
   Future<List<MovieModel>> getSimilarMovies(int id);
-  Future<List<MovieModel>> getSearchMovies(String searchTerm);
   Future<List<MovieModel>> getTopRated();
   Future<MovieDetailModel> getDetails(int id);
   Future<List<CastCrewModel>> getCastCrew(int id);
@@ -107,13 +106,6 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
     return movies!;
   }
 
-  @override
-  Future<List<MovieModel>> getSearchMovies(String searchTerm) async {
-    final response = await _client.getSearchMovies(searchTerm);
-    final movies = MoviesResultModel.fromJson(response).movies;
-    print(movies);
-    return movies!;
-  }
 
   @override
   Future<List<MovieModel>> getSimilarMovies(int id) async {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_movie_app/data/core/constant.dart';
-import 'package:flutter_riverpod_movie_app/data/core/models/movie_detail_model.dart';
+import 'package:flutter_riverpod_movie_app/models/movie_detail_model.dart';
 import 'package:flutter_riverpod_movie_app/provider/movie_provider.dart';
 import 'package:flutter_riverpod_movie_app/screens/movie_detail/movie_detail_widget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../../common/constant.dart';
 
 final _movieDetailsProvider = FutureProvider.family((ref, int id) async {
   return ref.read(movieProvider).getMovieDetails(id);
